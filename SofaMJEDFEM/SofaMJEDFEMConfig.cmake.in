@@ -1,0 +1,14 @@
+# CMake package configuration file for the SofaMJEDFEM plugin
+
+@PACKAGE_INIT@
+
+find_package(SofaFramework REQUIRED)
+
+if(NOT TARGET SofaMJEDFEM)
+        include("${CMAKE_CURRENT_LIST_DIR}/SofaMJEDFEMTargets.cmake")
+endif()
+
+check_required_components(SofaMJEDFEM)
+
+set(SOFAMJEDFEM_LIBRARIES SofaMJEDFEM)
+set_and_check(SOFAMJEDFEM_INCLUDE_DIRS @PACKAGE_SOFAMJEDFEM_INCLUDE_DIRS@)
