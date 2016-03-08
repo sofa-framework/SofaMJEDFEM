@@ -264,16 +264,16 @@ public:
     TetrahedronData<sofa::helper::vector<TetrahedronRestInformation> > tetrahedronInfo;
     EdgeData<sofa::helper::vector<EdgeInformation> > edgeInfo;
 
-    class TetrahedronHandler : public TopologyDataHandler<Tetrahedron,sofa::helper::vector<TetrahedronRestInformation> >
+    class TetrahedronHandler : public TopologyDataHandler<core::topology::BaseMeshTopology::Tetrahedron,sofa::helper::vector<TetrahedronRestInformation> >
     {
     public:
       typedef typename MJEDTetrahedralForceField<DataTypes>::TetrahedronRestInformation TetrahedronRestInformation;
       TetrahedronHandler(MJEDTetrahedralForceField<DataTypes>* ff,TetrahedronData<sofa::helper::vector<TetrahedronRestInformation> >* data )
-        :TopologyDataHandler<Tetrahedron,sofa::helper::vector<TetrahedronRestInformation> >(data)
+        :TopologyDataHandler<core::topology::BaseMeshTopology::Tetrahedron,sofa::helper::vector<TetrahedronRestInformation> >(data)
         ,ff(ff)
       {
       }
-      void applyCreateFunction(unsigned int, TetrahedronRestInformation &t, const Tetrahedron
+      void applyCreateFunction(unsigned int, TetrahedronRestInformation &t, const core::topology::BaseMeshTopology::Tetrahedron
                                &, const sofa::helper::vector<unsigned int> &, const sofa::helper::vector<double> &);
     protected:
       MJEDTetrahedralForceField<DataTypes>* ff;
