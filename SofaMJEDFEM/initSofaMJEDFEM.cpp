@@ -22,7 +22,7 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#include <sofa/component/initMJEDFEM.h>
+#include "initMJEDFEM.h"
 #include <sofa/core/ObjectFactory.h>
 
 namespace sofa

@@ -26,6 +26,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
 	initMJEDFEM.cpp 
+	initSofaMJEDFEM.cpp 
 	MJEDTetrahedralForceField.cpp
 	)
 
