@@ -29,7 +29,7 @@
 #pragma once
 #endif
 
-#include <fem/material/HyperelasticMaterialMJED.h>
+#include <SofaMJEDFEM/fem/material/HyperelasticMaterialMJED.h>
 #include <sofa/defaulttype/Vec.h>
 #include <sofa/defaulttype/Mat.h>
 #include <string>

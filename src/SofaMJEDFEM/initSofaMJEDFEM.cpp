@@ -22,25 +22,52 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#include "initMJEDFEM.h"
+#include <SofaMJEDFEM/config.h>
+#include <sofa/core/ObjectFactory.h>
+using sofa::core::ObjectFactory;
 
-namespace sofa
+
+extern "C" {
+    SOFA_MJED_FEM_API void initExternalModule();
+    SOFA_MJED_FEM_API const char* getModuleName();
+    SOFA_MJED_FEM_API const char* getModuleVersion();
+    SOFA_MJED_FEM_API const char* getModuleLicense();
+    SOFA_MJED_FEM_API const char* getModuleDescription();
+    SOFA_MJED_FEM_API const char* getModuleComponentList();
+}
+
+void initExternalModule()
 {
+    static bool first = true;
+    if (first)
+    {
+        first = false;
+    }
+}
 
-namespace component
+const char* getModuleName()
 {
+    return sofa_tostring(SOFA_TARGET);
+}
 
-	void SOFA_MJED_FEM_API initMJEDFEM()
-	{
-		static bool first = true;
-		if (first)
-		{
-			first = false;
-		}
-	}
-	
-SOFA_LINK_CLASS(MJEDTetrahedralForceField)
+const char* getModuleVersion()
+{
+    return sofa_tostring(PLUGINEXAMPLE_VERSION);
+}
 
-} // namespace component
+const char* getModuleLicense()
+{
+    return "LGPL";
+}
 
-} // namespace sofa
+const char* getModuleDescription()
+{
+    return "This plugin implements the Multiplicative Jacobian Energy Decomposition or MJED method.";
+}
+
+const char* getModuleComponentList()
+{
+    /// string containing the names of the classes provided by the plugin
+    static std::string classes = ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
+    return classes.c_str();
+}

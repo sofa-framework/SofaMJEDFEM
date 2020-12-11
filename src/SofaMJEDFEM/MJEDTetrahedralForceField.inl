@@ -26,16 +26,16 @@
 #define SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_INL
 
 #include <sofa/helper/system/gl.h>
-#include <fem/material/BoyceAndArrudaMJED.h>
-#include <fem/material/VerondaWestmanMJED.h>
-#include <fem/material/NeoHookeanMJED.h>
-#include <fem/material/MooneyRivlinMJED.h>
-#include <fem/material/STVenantKirchhoffMJED.h>
-#include <fem/material/HyperelasticMaterialMJED.h>
-#include <fem/material/CostaMJED.h>
-#include <fem/material/OgdenMJED.h>
-//#include <fem/material/NeoHookeanIsotropicMJED.h>
-#include "MJEDTetrahedralForceField.h"
+#include <SofaMJEDFEM/fem/material/BoyceAndArrudaMJED.h>
+#include <SofaMJEDFEM/fem/material/VerondaWestmanMJED.h>
+#include <SofaMJEDFEM/fem/material/NeoHookeanMJED.h>
+#include <SofaMJEDFEM/fem/material/MooneyRivlinMJED.h>
+#include <SofaMJEDFEM/fem/material/STVenantKirchhoffMJED.h>
+#include <SofaMJEDFEM/fem/material/HyperelasticMaterialMJED.h>
+#include <SofaMJEDFEM/fem/material/CostaMJED.h>
+#include <SofaMJEDFEM/fem/material/OgdenMJED.h>
+#include <SofaMJEDFEM/MJEDTetrahedralForceField.h>
+
 #include <sofa/core/visual/VisualParams.h>
 #include <sofa/defaulttype/Vec3Types.h>
 #include <SofaBaseMechanics/MechanicalObject.h>
@@ -47,6 +47,7 @@
 #include <SofaBaseTopology/TopologyData.inl>
 #include <algorithm>
 #include <iterator>
+
 namespace sofa
 {
 namespace component
@@ -293,34 +294,34 @@ template <class DataTypes> void MJEDTetrahedralForceField<DataTypes>::init()
 	/** parse the input material name */
         string material = f_materialName.getValue();
 	if (material=="ArrudaBoyce") {
-		fem::BoyceAndArrudaMJED<DataTypes> *BoyceAndArrudaMaterial = new fem::BoyceAndArrudaMJED<DataTypes>;
-		myMaterial = BoyceAndArrudaMaterial;
-		cout<<"The model is "<<material<<endl;
-		materialTermArray =  myMaterial->getMaterialTermArray();
+            fem::BoyceAndArrudaMJED<DataTypes> *BoyceAndArrudaMaterial = new fem::BoyceAndArrudaMJED<DataTypes>;
+            myMaterial = BoyceAndArrudaMaterial;
+            cout<<"The model is "<<material<<endl;
+            materialTermArray =  myMaterial->getMaterialTermArray();
 	} 
 	else if (material=="StVenantKirchhoff"){
-		fem::STVenantKirchhoffMJED<DataTypes> *STVenantKirchhoffMaterial = new fem::STVenantKirchhoffMJED<DataTypes>;
-		myMaterial = STVenantKirchhoffMaterial;
-		cout<<"The model is "<<material<<endl;
-		materialTermArray =  myMaterial->getMaterialTermArray();
-	}
+            fem::STVenantKirchhoffMJED<DataTypes> *STVenantKirchhoffMaterial = new fem::STVenantKirchhoffMJED<DataTypes>;
+            myMaterial = STVenantKirchhoffMaterial;
+            cout<<"The model is "<<material<<endl;
+            materialTermArray =  myMaterial->getMaterialTermArray();
+        }
 	else if (material=="NeoHookean"){
-		fem::NeoHookeanMJED<DataTypes> *NeoHookeanMaterial = new fem::NeoHookeanMJED<DataTypes>;
-		myMaterial = NeoHookeanMaterial;
-		cout<<"The model is "<<material<<endl;
-		materialTermArray =  myMaterial->getMaterialTermArray();
+            fem::NeoHookeanMJED<DataTypes> *NeoHookeanMaterial = new fem::NeoHookeanMJED<DataTypes>;
+            myMaterial = NeoHookeanMaterial;
+            cout<<"The model is "<<material<<endl;
+            materialTermArray =  myMaterial->getMaterialTermArray();
 	}
 	else if (material=="MooneyRivlin"){
-		fem::MooneyRivlinMJED<DataTypes> *MooneyRivlinMaterial = new fem::MooneyRivlinMJED<DataTypes>;
-		myMaterial = MooneyRivlinMaterial;
-		cout<<"The model is "<<material<<endl;
-		materialTermArray =  myMaterial->getMaterialTermArray();
+            fem::MooneyRivlinMJED<DataTypes> *MooneyRivlinMaterial = new fem::MooneyRivlinMJED<DataTypes>;
+            myMaterial = MooneyRivlinMaterial;
+            cout<<"The model is "<<material<<endl;
+            materialTermArray =  myMaterial->getMaterialTermArray();
 	}
 	else if (material=="VerondaWestman"){
-		fem::VerondaWestmanMJED<DataTypes> *VerondaWestmanMaterial = new fem::VerondaWestmanMJED<DataTypes>;
-		myMaterial = VerondaWestmanMaterial;
-		cout<<"The model is "<<material<<endl;
-		materialTermArray =  myMaterial->getMaterialTermArray();
+            fem::VerondaWestmanMJED<DataTypes> *VerondaWestmanMaterial = new fem::VerondaWestmanMJED<DataTypes>;
+            myMaterial = VerondaWestmanMaterial;
+            cout<<"The model is "<<material<<endl;
+            materialTermArray =  myMaterial->getMaterialTermArray();
 	}
 
 	/*else if (material=="Isotropic_NeoHookean"){
@@ -330,28 +331,28 @@ template <class DataTypes> void MJEDTetrahedralForceField<DataTypes>::init()
 	materialTermArray =  myMaterial->getMaterialTermArray();
 	}*/
 	else if (material=="Costa"){
-		fem::CostaMJED<DataTypes> *CostaMaterial = new fem::CostaMJED<DataTypes>(globalParameters);
-		myMaterial =CostaMaterial;
-		cout<<"The model is "<<material<<endl;
-		materialTermArray =  myMaterial->getMaterialTermArray();
+            fem::CostaMJED<DataTypes> *CostaMaterial = new fem::CostaMJED<DataTypes>(globalParameters);
+            myMaterial =CostaMaterial;
+            cout<<"The model is "<<material<<endl;
+            materialTermArray =  myMaterial->getMaterialTermArray();
 	}
 	else if (material=="Ogden"){
-		fem::OgdenMJED<DataTypes> *OgdenMaterial = new fem::OgdenMJED<DataTypes>(globalParameters);
-		myMaterial =OgdenMaterial;
-		cout<<"The model is "<<material<<endl;
-		materialTermArray =  myMaterial->getMaterialTermArray();
+            fem::OgdenMJED<DataTypes> *OgdenMaterial = new fem::OgdenMJED<DataTypes>(globalParameters);
+            myMaterial =OgdenMaterial;
+            cout<<"The model is "<<material<<endl;
+            materialTermArray =  myMaterial->getMaterialTermArray();
 	}
 
 	else {
-		cerr << "material name " << material << " is not valid"<<endl;
+            cerr << "material name " << material << " is not valid"<<endl;
 	}
 
 
 
 	if (!_topology->getNbTetrahedra())
 	{
-		cerr << "ERROR(MJEDForceField): object must have a Tetrahedral Set Topology.\n";
-		return;
+            cerr << "ERROR(MJEDForceField): object must have a Tetrahedral Set Topology.\n";
+            return;
 	}
 
 	helper::vector<typename MJEDTetrahedralForceField<DataTypes>::TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
@@ -361,69 +362,70 @@ template <class DataTypes> void MJEDTetrahedralForceField<DataTypes>::init()
 
 	helper::vector<typename MJEDTetrahedralForceField<DataTypes>::EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
 
-    edgeInf.resize(_topology->getNbEdges());
-    edgeInfo.createTopologicalEngine(_topology);
-    edgeInfo.registerTopologicalData();
+        edgeInf.resize(_topology->getNbEdges());
+        edgeInfo.createTopologicalEngine(_topology);
+        edgeInfo.registerTopologicalData();
 
 	edgeInfo.endEdit();
 
 	// get restPosition
 	if (_initialPoints.size() == 0)
 	{
-		const VecCoord& p = this->mstate->read(core::ConstVecCoordId::restPosition())->getValue();
-		_initialPoints=p;
+            const VecCoord& p = this->mstate->read(core::ConstVecCoordId::restPosition())->getValue();
+            _initialPoints=p;
 	}
-	int i;
-	// initialize data that are the same for all tetrahedrons
+
+        // initialize data that are the same for all tetrahedrons
 	typename vector<HyperelasticMatTerm *>::iterator it;
 	for (it=materialTermArray.begin();it<materialTermArray.end();++it) {
-		counter.push_back((*it)->getNumberOfExponential());
+            counter.push_back((*it)->getNumberOfExponential());
 	}
-	//int	id=counter[0];
+
 	bool Expo;
 	if(counter[0]==0) Expo=false;
 	else Expo=true;
 
 	for (unsigned int m=1; m < counter.size(); ++m){
-		if (counter[m]==counter[m-1]){			
-			if(counter[m]==0) Expo=false;
-			else Expo=true;
-		}
-		else{
-			isExponential.push_back(Expo);
-			if(counter[m]==0) Expo=false;
-			else Expo=true;
+            if (counter[m]==counter[m-1]){
+                if(counter[m]==0) Expo=false;
+                else Expo=true;
+            }
+            else{
+                isExponential.push_back(Expo);
+                if(counter[m]==0) Expo=false;
+                else Expo=true;
 
-		}
+            }
 	}// end of for m
 	isExponential.push_back(Expo);
 
 	if(viscous){
-		std::vector<Real> tauu=f_parameterTau.getValue();
-                Real dt= (Real)this->getContext()->getDt();
-		std::vector<Real> alphaa=f_parameterAlpha.getValue();
-                coeffA.resize(tauu.size());
-                coeffB.resize(tauu.size());
-		sumA=0;
-                for (unsigned int num=0; num<tauu.size();num++){
-                        coeffA[num]=dt*alphaa[num]/(dt+tauu[num]);
-                        coeffB[num]=tauu[num]/(dt+tauu[num]);
-                        sumA+=coeffA[num];
-		}
+            std::vector<Real> tauu=f_parameterTau.getValue();
+            Real dt= (Real)this->getContext()->getDt();
+            std::vector<Real> alphaa=f_parameterAlpha.getValue();
+            coeffA.resize(tauu.size());
+            coeffB.resize(tauu.size());
+            sumA=0;
+            for (unsigned int num=0; num<tauu.size();num++){
+                coeffA[num]=dt*alphaa[num]/(dt+tauu[num]);
+                coeffB[num]=tauu[num]/(dt+tauu[num]);
+                sumA+=coeffA[num];
+            }
 	}
 
 
 
 	/// initialize the data structure associated with each tetrahedron
-	for (i=0;i<_topology->getNbTetrahedra();++i) {
-      tetrahedronHandler->applyCreateFunction(i,tetrahedronInf[i],
+        for (Index i=0;i<_topology->getNbTetrahedra();++i) {
+
+            tetrahedronHandler->applyCreateFunction(i,tetrahedronInf[i],
                                               _topology->getTetrahedron(i),  (const vector< unsigned int > )0,
                                               (const vector< double >)0);
-		if(viscous){
-			int size=coeffA.size();
-			tetrahedronInf[i].GammaOld.resize(size);
-			tetrahedronInf[i].GammaNew.resize(size);	
-		}
+            if(viscous){
+                    int size=coeffA.size();
+                    tetrahedronInf[i].GammaOld.resize(size);
+                    tetrahedronInf[i].GammaNew.resize(size);
+            }
 	}
 	/// set the call back function upon creation of a tetrahedron
         tetrahedronInfo.createTopologicalEngine(_topology,tetrahedronHandler);

@@ -29,7 +29,7 @@
 #pragma once
 #endif
 
-#include <fem/material/HyperelasticMaterialMJED.h>
+#include <SofaMJEDFEM/fem/material/HyperelasticMaterialMJED.h>
 #include <sofa/defaulttype/Vec.h>
 #include <sofa/defaulttype/Mat.h>
 #include <string>
@@ -95,14 +95,16 @@ class OgdenMJED: public HyperelasticMaterialMJED<DataTypes>{
 		}
 
 		virtual void CalculFunction(typename HyperelasticMaterialMJED<DataTypes>::StrainInformation *sinfo){
-		MatrixSym C=sinfo->deformationTensor;
 #ifdef SOFA_HAVE_EIGEN2	
-		EigenMatrix CEigen;
+                MatrixSym C=sinfo->deformationTensor;
+                EigenMatrix CEigen;
 		CEigen(0,0)=C[0];CEigen(0,1)=C[1];CEigen(1,0)=C[1];CEigen(1,1)=C[2];
 		CEigen(1,2)=C[4];CEigen(2,1)=C[4];CEigen(2,0)=C[3];CEigen(0,2)=C[3];CEigen(2,2)=C[5];
 		Eigen::SelfAdjointEigenSolver<EigenMatrix> Vect(CEigen,true);
 		sinfo->Evalue=Vect.eigenvalues();
 		sinfo->Evect=Vect.eigenvectors();
+#else
+                SOFA_UNUSED(sinfo);
 #endif
 		}
 

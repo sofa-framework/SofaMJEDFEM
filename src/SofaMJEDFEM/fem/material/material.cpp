@@ -22,55 +22,23 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#define SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_CPP
+//used only to test compilation and dependencies in SOFA. (TODO: see if it has to be removed, or to be removed as soon as another .cpp include them)
 
-#include "MJEDTetrahedralForceField.inl"
-
-#include "initMJEDFEM.h"
-#include <sofa/defaulttype/Vec3Types.h>
-#include <SofaBaseMechanics/MechanicalObject.h>
-#include <sofa/core/ObjectFactory.h>
-
-#include <sofa/core/behavior/ForceField.inl>
-#include <SofaBaseTopology/TopologyData.inl>
-
-#include <sofa/helper/gl/template.h>
-#include <string.h>
-#include <iostream>
-
-namespace sofa
-{
-
-namespace component
-{
-
-namespace forcefield
-{
-
-using namespace sofa::defaulttype;
-
-SOFA_DECL_CLASS(MJEDTetrahedralForceField)
-
-// Register in the Factory
-int MJEDTetrahedralForceFieldClass = core::RegisterObject("Generic Tetrahedral finite elements")
-#ifndef SOFA_FLOAT
-.add< MJEDTetrahedralForceField<sofa::defaulttype::Vec3dTypes> >()
-#endif
-#ifndef SOFA_DOUBLE
-.add< MJEDTetrahedralForceField<Vec3fTypes> >()
-#endif
-;
-
-#ifndef SOFA_FLOAT
-template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3dTypes>;
-#endif
-#ifndef SOFA_DOUBLE
-template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3fTypes>;
-#endif
-
-} // namespace forcefield
-
-} // namespace component
-
-} // namespace sofa
+#include <SofaMiscFem/BoyceAndArruda.h>
+#include <SofaMiscFem/MooneyRivlin.h>
+#include <SofaMiscFem/STVenantKirchhoff.h>
+#include <SofaMiscFem/HyperelasticMaterial.h>
+#include <SofaMiscFem/VerondaWestman.h>
+#include <SofaMiscFem/Costa.h>
+#include <SofaMJEDFEM/fem/material/NeoHookean.h>
+#include <SofaMJEDFEM/fem/material/NeoHookeanIsotropicMJED.h>
+#include <SofaMJEDFEM/fem/material/Ogden.h>
+#include <SofaMJEDFEM/fem/material/BoyceAndArrudaMJED.h>
+#include <SofaMJEDFEM/fem/material/MooneyRivlinMJED.h>
+#include <SofaMJEDFEM/fem/material/STVenantKirchhoffMJED.h>
+#include <SofaMJEDFEM/fem/material/HyperelasticMaterialMJED.h>
+#include <SofaMJEDFEM/fem/material/NeoHookeanMJED.h>
+#include <SofaMJEDFEM/fem/material/VerondaWestmanMJED.h>
+#include <SofaMJEDFEM/fem/material/CostaMJED.h>
+#include <SofaMJEDFEM/fem/material/OgdenMJED.h>
 

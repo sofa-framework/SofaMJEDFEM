@@ -22,28 +22,15 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_MJED_FEM_INIT_H
-#define SOFA_COMPONENT_MJED_FEM_INIT_H
+#pragma once
 
-#include <sofa/helper/system/config.h>
+#include <sofa/config.h>
+
+#define SOFAMJEDFEM_VERSION @PROJECT_VERSION@
 
 #ifdef SOFA_BUILD_MJED_FEM
-#define SOFA_MJED_FEM_API SOFA_EXPORT_DYNAMIC_LIBRARY
+#  define SOFA_TARGET @PROJECT_NAME@
+#  define SOFA_MJED_FEM_API SOFA_EXPORT_DYNAMIC_LIBRARY
 #else
-#define SOFA_MJED_FEM_API  SOFA_IMPORT_DYNAMIC_LIBRARY
+#  define SOFA_MJED_FEM_API  SOFA_IMPORT_DYNAMIC_LIBRARY
 #endif
-
-namespace sofa
-{
-
-namespace component
-{
-
-void SOFA_MJED_FEM_API initMJEDFEM();
-
-} // namespace component
-
-} // namespace sofa
-
-#endif
-

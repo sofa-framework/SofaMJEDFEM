@@ -22,8 +22,21 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#include "initMJEDFEM.h"
+#define SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_CPP
+
+#include <SofaMJEDFEM/MJEDTetrahedralForceField.inl>
+
+#include <SofaMJEDFEM/config.h>
+#include <sofa/defaulttype/Vec3Types.h>
+#include <SofaBaseMechanics/MechanicalObject.h>
 #include <sofa/core/ObjectFactory.h>
+
+#include <sofa/core/behavior/ForceField.inl>
+#include <SofaBaseTopology/TopologyData.inl>
+
+#include <sofa/helper/gl/template.h>
+#include <string.h>
+#include <iostream>
 
 namespace sofa
 {
@@ -31,52 +44,33 @@ namespace sofa
 namespace component
 {
 
-	extern "C" {
-		SOFA_MJED_FEM_API void initExternalModule();
-		SOFA_MJED_FEM_API const char* getModuleName();
-		SOFA_MJED_FEM_API const char* getModuleVersion();
-		SOFA_MJED_FEM_API const char* getModuleLicense();
-		SOFA_MJED_FEM_API const char* getModuleDescription();
-		SOFA_MJED_FEM_API const char* getModuleComponentList();
-	}
+namespace forcefield
+{
 
-	void initExternalModule()
-	{
-		static bool first = true;
-		if (first)
-		{
-			initMJEDFEM();
-			first = false;
-		}
-	}
+using namespace sofa::defaulttype;
 
-	const char* getModuleName()
-	{
-		return "SofaMJEDFEM";
-	}
+SOFA_DECL_CLASS(MJEDTetrahedralForceField)
 
-	const char* getModuleVersion()
-	{
-		return "1.0";
-	}
+// Register in the Factory
+int MJEDTetrahedralForceFieldClass = core::RegisterObject("Generic Tetrahedral finite elements")
+#ifndef SOFA_FLOAT
+.add< MJEDTetrahedralForceField<sofa::defaulttype::Vec3dTypes> >()
+#endif
+#ifndef SOFA_DOUBLE
+.add< MJEDTetrahedralForceField<Vec3fTypes> >()
+#endif
+;
 
-	const char* getModuleLicense()
-	{
-		return "Private";
-	}
+#ifndef SOFA_FLOAT
+template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3dTypes>;
+#endif
+#ifndef SOFA_DOUBLE
+template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3fTypes>;
+#endif
 
-	const char* getModuleDescription()
-	{
-		return "Tetrahedron FEM for several elastic models: Multiplicative Jacobian Energy Decomposition Method";
-	}
-
-	const char* getModuleComponentList()
-	{
-		/// string containing the names of the classes provided by the plugin
-		static std::string classes = sofa::core::ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
-		return classes.c_str();
-	}
+} // namespace forcefield
 
 } // namespace component
 
 } // namespace sofa
+
