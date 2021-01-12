@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 project(SofaMJEDFEM VERSION 1.0 LANGUAGES CXX)
 
 find_package(SofaFramework REQUIRED)
+find_package(Sofa.GL REQUIRED)
 
 set(SOFAMJEDFEM_SRC_DIR src/SofaMJEDFEM)
 
@@ -37,7 +38,7 @@ add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILE
 
 
 # Link the plugin library to its dependency
-target_link_libraries(${PROJECT_NAME} SofaBaseTopology)
+target_link_libraries(${PROJECT_NAME} SofaBaseTopology SofaBaseMechanics)
 
 
 # Create package Config, Version & Target files
