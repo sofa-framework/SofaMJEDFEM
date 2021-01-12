@@ -27,7 +27,6 @@
 #include <SofaMJEDFEM/MJEDTetrahedralForceField.inl>
 
 #include <SofaMJEDFEM/config.h>
-#include <sofa/defaulttype/Vec3Types.h>
 #include <SofaBaseMechanics/MechanicalObject.h>
 #include <sofa/core/ObjectFactory.h>
 

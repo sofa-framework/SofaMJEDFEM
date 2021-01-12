@@ -38,7 +38,7 @@ add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${README_FILE
 
 
 # Link the plugin library to its dependency
-target_link_libraries(${PROJECT_NAME} SofaBaseTopology SofaBaseMechanics)
+target_link_libraries(${PROJECT_NAME} SofaBaseTopology SofaBaseMechanics Sofa.GL)
 
 
 # Create package Config, Version & Target files

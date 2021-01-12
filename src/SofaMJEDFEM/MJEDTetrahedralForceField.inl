@@ -25,7 +25,7 @@
 #ifndef SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_INL
 #define SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_INL
 
-#include <sofa/helper/system/gl.h>
+#include <sofa/gl/gl.h>
 #include <SofaMJEDFEM/fem/material/BoyceAndArrudaMJED.h>
 #include <SofaMJEDFEM/fem/material/VerondaWestmanMJED.h>
 #include <SofaMJEDFEM/fem/material/NeoHookeanMJED.h>
@@ -37,7 +37,7 @@
 #include <SofaMJEDFEM/MJEDTetrahedralForceField.h>
 
 #include <sofa/core/visual/VisualParams.h>
-#include <sofa/defaulttype/Vec3Types.h>
+#include <sofa/defaulttype/VecTypes.h>
 #include <SofaBaseMechanics/MechanicalObject.h>
 #include <sofa/core/ObjectFactory.h>
 #include <fstream> // for reading the file
