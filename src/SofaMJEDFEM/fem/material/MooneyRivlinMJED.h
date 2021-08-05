@@ -22,26 +22,16 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_FEM_MOONEYRIVLINMJED_H
-#define SOFA_COMPONENT_FEM_MOONEYRIVLINMJED_H
-
-#if !defined(__GNUC__) || (__GNUC__ > 3 || (_GNUC__ == 3 && __GNUC_MINOR__ > 3))
 #pragma once
-#endif
 
 #include <SofaMJEDFEM/fem/material/HyperelasticMaterialMJED.h>
-#include <sofa/defaulttype/Vec.h>
-#include <sofa/defaulttype/Mat.h>
+#include <sofa/type/Vec.h>
+#include <sofa/type/Mat.h>
+#include <sofa/type/MatSym.h>
 #include <string>
 
 
-namespace sofa
-{
-
-namespace component
-{
-
-namespace fem
+namespace sofa::component::fem
 {
 using namespace std;
 using namespace sofa::defaulttype;
@@ -60,9 +50,9 @@ template<class DataTypes>
 class MooneyRivlinMJED : public HyperelasticMaterialMJED<DataTypes>{
 
   typedef typename DataTypes::Coord::value_type Real;
-  typedef Mat<3,3,Real> Matrix3;
-  typedef Mat<6,6,Real> Matrix6;
-  typedef MatSym<3,Real> MatrixSym;
+  typedef type::Mat<3,3,Real> Matrix3;
+  typedef type::Mat<6,6,Real> Matrix6;
+  typedef type::MatSym<3,Real> MatrixSym;
 
   
 	class Term1:public HyperelasticMaterialMJED<DataTypes>::HyperelasticMaterialTerm {
@@ -236,10 +226,4 @@ public:
 };
 
 
-} // namespace fem
-
-} // namespace component
-
-} // namespace sofa
-
-#endif
+} // namespace sofa::component::fem

@@ -22,26 +22,15 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_FEM_NEOHOOKEANISOTROPIC_H
-#define SOFA_COMPONENT_FEM_NEOHOOKEANISOTROPIC_H
-
-#if !defined(__GNUC__) || (__GNUC__ > 3 || (_GNUC__ == 3 && __GNUC_MINOR__ > 3))
 #pragma once
-#endif
 
 #include <SofaMiscFem/HyperelasticMaterial.h>
-#include <sofa/defaulttype/Vec.h>
-#include <sofa/defaulttype/Mat.h>
+#include <sofa/type/Vec.h>
+#include <sofa/type/Mat.h>
 #include <string>
 
 
-namespace sofa
-{
-
-namespace component
-{
-
-namespace fem
+namespace sofa::component::fem
 {
 using namespace std;
 using namespace sofa::defaulttype;
@@ -59,13 +48,13 @@ the determinant of the deformation gradient J and the right Cauchy Green deforma
 template<class DataTypes>
 class NeoHookeanIsotropic : public HyperelasticMaterial<DataTypes>{
 
-  typedef typename DataTypes::Coord::value_type Real;
-  typedef typename DataTypes::Coord Coord;
-      typedef Mat<3,3,Real> Matrix3;
-	    typedef Mat<6,6,Real> Matrix6;
-      typedef MatSym<3,Real> MatrixSym;
-      typedef typename fem::HyperelasticMaterial<DataTypes>::triplet triplet;
-      typedef typename std::pair<Real,MatrixSym> MatrixCoeffPair;
+    typedef typename DataTypes::Coord::value_type Real;
+    typedef typename DataTypes::Coord Coord;
+    typedef type::Mat<3,3,Real> Matrix3;
+    typedef type::Mat<6,6,Real> Matrix6;
+    typedef type::MatSym<3,Real> MatrixSym;
+    typedef typename fem::HyperelasticMaterial<DataTypes>::triplet triplet;
+    typedef typename std::pair<Real,MatrixSym> MatrixCoeffPair;
 
   
 	class Term1:public HyperelasticMaterial<DataTypes>::HyperelasticMaterialTerm {
@@ -637,10 +626,4 @@ public:
 };
 
 
-} // namespace fem
-
-} // namespace component
-
-} // namespace sofa
-
-#endif
+} // namespace sofa::component::fem

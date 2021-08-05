@@ -33,17 +33,10 @@
 #include <sofa/core/behavior/ForceField.inl>
 #include <SofaBaseTopology/TopologyData.inl>
 
-#include <sofa/helper/gl/template.h>
 #include <string.h>
 #include <iostream>
 
-namespace sofa
-{
-
-namespace component
-{
-
-namespace forcefield
+namespace sofa::component::forcefield
 {
 
 using namespace sofa::defaulttype;
@@ -67,9 +60,4 @@ template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3dTypes>;
 template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3fTypes>;
 #endif
 
-} // namespace forcefield
-
-} // namespace component
-
-} // namespace sofa
-
+} // namespace sofa::component::forcefield
