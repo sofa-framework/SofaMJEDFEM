@@ -1,4 +1,4 @@
-# SofaMJEDFEM
+# SofaMJED
 
 ## Description
 
