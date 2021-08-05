@@ -22,8 +22,7 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_INL
-#define SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_INL
+#pragma once
 
 #include <sofa/gl/gl.h>
 #include <SofaMJEDFEM/fem/material/BoyceAndArrudaMJED.h>
@@ -42,18 +41,15 @@
 #include <sofa/core/ObjectFactory.h>
 #include <fstream> // for reading the file
 #include <iostream> //for debugging
-#include <sofa/helper/gl/template.h>
+#include <sofa/gl/template.h>
 #include <sofa/core/behavior/ForceField.inl>
 #include <SofaBaseTopology/TopologyData.inl>
 #include <algorithm>
 #include <iterator>
 
-namespace sofa
+namespace sofa::component::forcefield
 {
-namespace component
-{
-namespace forcefield
-{
+
 using namespace sofa::defaulttype;
 using namespace	sofa::component::topology;
 using namespace core::topology;
@@ -62,8 +58,8 @@ template< class DataTypes>
 void MJEDTetrahedralForceField<DataTypes>::TetrahedronHandler::applyCreateFunction(unsigned int tetrahedronIndex,
                                                                                    TetrahedronRestInformation &tinfo,
                                                                                    const Tetrahedron &,
-                                                                                   const sofa::helper::vector<unsigned int> &,
-                                                                                   const sofa::helper::vector<double> &)
+                                                                                   const sofa::type::vector<unsigned int> &,
+                                                                                   const sofa::type::vector<double> &)
 {
   if (ff) {
     const vector< Tetrahedron > &tetrahedronArray=ff->_topology->getTetrahedra() ;
@@ -355,16 +351,15 @@ template <class DataTypes> void MJEDTetrahedralForceField<DataTypes>::init()
             return;
 	}
 
-	helper::vector<typename MJEDTetrahedralForceField<DataTypes>::TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
+        type::vector<typename MJEDTetrahedralForceField<DataTypes>::TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
 
 	/// prepare to store info in the triangle array
 	tetrahedronInf.resize(_topology->getNbTetrahedra());
 
-	helper::vector<typename MJEDTetrahedralForceField<DataTypes>::EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
+        type::vector<typename MJEDTetrahedralForceField<DataTypes>::EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
 
         edgeInf.resize(_topology->getNbEdges());
-        edgeInfo.createTopologicalEngine(_topology);
-        edgeInfo.registerTopologicalData();
+        edgeInfo.createTopologyHandler(_topology);
 
 	edgeInfo.endEdit();
 
@@ -428,9 +423,7 @@ template <class DataTypes> void MJEDTetrahedralForceField<DataTypes>::init()
             }
 	}
 	/// set the call back function upon creation of a tetrahedron
-        tetrahedronInfo.createTopologicalEngine(_topology,tetrahedronHandler);
-
-        tetrahedronInfo.registerTopologicalData();
+        tetrahedronInfo.createTopologyHandler(_topology);
 
 	tetrahedronInfo.endEdit();
 	//  testDerivatives();  //to decomment if the test should be done
@@ -455,7 +448,7 @@ void MJEDTetrahedralForceField<DataTypes>::addForce(const core::MechanicalParams
 	unsigned int i=0,j=0,k=0,l=0;
 	unsigned int nbTetrahedra=_topology->getNbTetrahedra();
 
-	helper::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
+        type::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
 
 
 	TetrahedronRestInformation *tetInfo;
@@ -749,8 +742,8 @@ void MJEDTetrahedralForceField<DataTypes>::updateMatrixData()
 		const vector< Edge> &edgeArray=_topology->getEdges() ;
 
 
-		helper::vector<EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
-		helper::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
+                type::vector<EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
+                type::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
 
 		// VecDeriv& x = myposition;  // to uncomment for test derivatives and comment next line
 		const VecCoord& x = this->mstate->read(core::ConstVecCoordId::position())->getValue();
@@ -885,7 +878,7 @@ void MJEDTetrahedralForceField<DataTypes>::updateMatrixData()
 
 
 				//second derivative of J:
-				MatNoInit<3,3,Real> d2J; 
+                                type::MatNoInit<3,3,Real> d2J;
 				dp = (x[ta[vertexVertexIndex[k][l][0]]] - x[ta[vertexVertexIndex[k][l][1]]])  * tetInfo->volScale;
 
 				d2J[0][0] = 0;
@@ -1045,7 +1038,7 @@ void MJEDTetrahedralForceField<DataTypes>::addDForce(const core::MechanicalParam
 	unsigned int nbEdges=_topology->getNbEdges();
 	const vector< Edge> &edgeArray=_topology->getEdges();
 
-	helper::vector<EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
+        type::vector<EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
 	EdgeInformation *einfo;
 
 	this->updateMatrixData();			
@@ -1081,7 +1074,7 @@ void MJEDTetrahedralForceField<DataTypes>::addKToMatrix(sofa::defaulttype::BaseM
 	unsigned int nbEdges=_topology->getNbEdges();
 	const vector< Edge> &edgeArray=_topology->getEdges();
 
-	helper::vector<EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
+        type::vector<EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
 	EdgeInformation *einfo;
 
 	this->updateMatrixData();
@@ -1125,21 +1118,21 @@ void MJEDTetrahedralForceField<DataTypes>::draw(const core::visual::VisualParams
 }
 
 template<class DataTypes>
-Mat<3,3,double> MJEDTetrahedralForceField<DataTypes>::getPhi(int TetrahedronIndex)
+type::Mat<3,3,double> MJEDTetrahedralForceField<DataTypes>::getPhi(int TetrahedronIndex)
 {
-	helper::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
+        type::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
 	TetrahedronRestInformation *tetInfo;
 	tetInfo=&tetrahedronInf[TetrahedronIndex];
 	return tetInfo->deformationGradient;
 
 }
 template<class DataTypes>
-Mat<3,3,double> MJEDTetrahedralForceField<DataTypes>::getForce(int TetrahedronIndex)
+type::Mat<3,3,double> MJEDTetrahedralForceField<DataTypes>::getForce(int TetrahedronIndex)
 {
-	helper::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
+        type::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
 	TetrahedronRestInformation *tetInfo;
 	tetInfo=&tetrahedronInf[TetrahedronIndex];
-	Mat<3,3,double> force,inverseDeformationGradient;
+        type::Mat<3,3,double> force,inverseDeformationGradient;
 	force.clear();
 	inverseDeformationGradient.invert(tetInfo->deformationGradient);
 	for(unsigned int w=0;w<isExponential.size();++w){
@@ -1191,7 +1184,7 @@ void MJEDTetrahedralForceField<DataTypes>::testDerivatives()
 	Real avgError=0.0;
 	int count=0;
 
-	helper::vector<TetrahedronRestInformation> &tetrahedronInf = *(tetrahedronInfo.beginEdit());
+        type::vector<TetrahedronRestInformation> &tetrahedronInf = *(tetrahedronInfo.beginEdit());
 
 	for (unsigned int moveIdx=0; moveIdx<pos.size(); moveIdx++)
 	{
@@ -1321,10 +1314,4 @@ void MJEDTetrahedralForceField<DataTypes>::saveMesh( const char *filename )
 }
 
 
-} // namespace forcefield
-
-} // namespace component
-
-} // namespace sofa
-
-#endif // SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_INL
+} // namespace sofa::component::forcefield

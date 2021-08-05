@@ -22,32 +22,23 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#ifndef SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_H
-#define SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_H
-
-#if !defined(__GNUC__) || (__GNUC__ > 3 || (_GNUC__ == 3 && __GNUC_MINOR__ > 3))
 #pragma once
-#endif
+
 #include <SofaMJEDFEM/fem/material/HyperelasticMaterialMJED.h>
 
 #include <sofa/core/behavior/ForceField.h>
 #include <SofaBaseMechanics/MechanicalObject.h>
-#include <sofa/defaulttype/Vec.h>
-#include <sofa/defaulttype/Mat.h>
+#include <sofa/type/Vec.h>
+#include <sofa/type/Mat.h>
 #include <sofa/defaulttype/MatSym.h>
 #include <sofa/core/topology/BaseMeshTopology.h>
 #include <SofaBaseTopology/TopologyData.h>
 #include <string>
 #include <map>
 
-namespace sofa
+namespace sofa::component::forcefield
 {
 
-namespace component
-{
-
-namespace forcefield
-{
 using namespace std;
 using namespace sofa::defaulttype;
 using namespace sofa::component::topology;
@@ -77,14 +68,14 @@ public:
     typedef core::objectmodel::Data<VecDeriv>    DataVecDeriv;
     typedef core::objectmodel::Data<VecCoord>    DataVecCoord;
 
-    typedef typename defaulttype::MatSym<3,Real> MatrixSym;
-    typedef typename defaulttype::Mat<3,3,Real> Matrix3;
+    typedef typename type::MatSym<3,Real> MatrixSym;
+    typedef typename type::Mat<3,3,Real> Matrix3;
 
 
-    typedef helper::vector<Real> SetParameterArray; //necessary to store hyperelastic parameters (mu, lambda ...)
-    typedef helper::vector<Real> SetParameterAlpha; // necessary to store viscous parameter of Prony series (alpha infinity, alpha1, alpha2...)
-    typedef helper::vector<Real> SetParameterTau; // necessary to store viscous parameter (time ) of Prony series (deltaT, tau1,tau2..)
-    typedef helper::vector<Coord> SetAnisotropyDirectionArray; // When the model is anisotropic, for instance in invariant I4
+    typedef type::vector<Real> SetParameterArray; //necessary to store hyperelastic parameters (mu, lambda ...)
+    typedef type::vector<Real> SetParameterAlpha; // necessary to store viscous parameter of Prony series (alpha infinity, alpha1, alpha2...)
+    typedef type::vector<Real> SetParameterTau; // necessary to store viscous parameter (time ) of Prony series (deltaT, tau1,tau2..)
+    typedef type::vector<Coord> SetAnisotropyDirectionArray; // When the model is anisotropic, for instance in invariant I4
 
 
     typedef sofa::Index Index;
@@ -243,23 +234,23 @@ public:
 
     void draw(const core::visual::VisualParams* vparams) override;
 
-    Mat<3,3,double> getPhi( int tetrahedronIndex);
-    Mat<3,3,double> getForce( int tetrahedronIndex);
-    TetrahedronData<sofa::helper::vector<TetrahedronRestInformation> > tetrahedronInfo;
-    EdgeData<sofa::helper::vector<EdgeInformation> > edgeInfo;
+    type::Mat<3,3,double> getPhi( int tetrahedronIndex);
+    type::Mat<3,3,double> getForce( int tetrahedronIndex);
+    TetrahedronData<sofa::type::vector<TetrahedronRestInformation> > tetrahedronInfo;
+    EdgeData<sofa::type::vector<EdgeInformation> > edgeInfo;
 
-    class TetrahedronHandler : public TopologyDataHandler<core::topology::BaseMeshTopology::Tetrahedron,sofa::helper::vector<TetrahedronRestInformation> >
+    class TetrahedronHandler : public TopologyDataHandler<core::topology::BaseMeshTopology::Tetrahedron,sofa::type::vector<TetrahedronRestInformation> >
     {
     public:
         typedef typename MJEDTetrahedralForceField<DataTypes>::TetrahedronRestInformation TetrahedronRestInformation;
-        TetrahedronHandler(MJEDTetrahedralForceField<DataTypes>* ff,TetrahedronData<sofa::helper::vector<TetrahedronRestInformation> >* data )
-            :TopologyDataHandler<core::topology::BaseMeshTopology::Tetrahedron,sofa::helper::vector<TetrahedronRestInformation> >(data)
+        TetrahedronHandler(MJEDTetrahedralForceField<DataTypes>* ff,TetrahedronData<sofa::type::vector<TetrahedronRestInformation> >* data )
+            :TopologyDataHandler<core::topology::BaseMeshTopology::Tetrahedron,sofa::type::vector<TetrahedronRestInformation> >(data)
             ,ff(ff)
       {
       }
 
       void applyCreateFunction(unsigned int, TetrahedronRestInformation &t, const core::topology::BaseMeshTopology::Tetrahedron
-                               &, const sofa::helper::vector<unsigned int> &, const sofa::helper::vector<double> &);
+                               &, const sofa::type::vector<unsigned int> &, const sofa::type::vector<double> &);
 
     protected:
         MJEDTetrahedralForceField<DataTypes>* ff;
@@ -293,10 +284,4 @@ extern template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3fTypes>;
 
 #endif // defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_CPP)
 
-} // namespace forcefield
-
-} // namespace component
-
-} // namespace sofa
-
-#endif // SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_H
+} // namespace sofa::component::forcefield
