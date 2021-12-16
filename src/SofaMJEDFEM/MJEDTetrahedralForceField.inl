@@ -1069,7 +1069,7 @@ void MJEDTetrahedralForceField<DataTypes>::addDForce(const core::MechanicalParam
 }
 
 template <class DataTypes> 
-void MJEDTetrahedralForceField<DataTypes>::addKToMatrix(sofa::defaulttype::BaseMatrix *m, SReal kFactor, unsigned int &offset) {
+void MJEDTetrahedralForceField<DataTypes>::addKToMatrix(sofa::linearalgebra::BaseMatrix *m, SReal kFactor, unsigned int &offset) {
 	unsigned int l=0;
 	unsigned int nbEdges=_topology->getNbEdges();
 	const vector< Edge> &edgeArray=_topology->getEdges();
