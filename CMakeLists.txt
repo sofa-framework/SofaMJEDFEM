@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.12)
 project(SofaMJEDFEM VERSION 1.0 LANGUAGES CXX)
 
 find_package(SofaFramework REQUIRED)
+find_package(SofaBaseTopology REQUIRED)
+find_package(SofaBaseMechanics REQUIRED)
 find_package(Sofa.GL REQUIRED)
 
 set(SOFAMJEDFEM_SRC_DIR src/SofaMJEDFEM)
