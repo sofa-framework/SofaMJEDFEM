@@ -268,17 +268,9 @@ protected:
 };
 
 using sofa::defaulttype::Vec3dTypes;
-using sofa::defaulttype::Vec3fTypes;
 
-#if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_CPP)
-
-#ifndef SOFA_FLOAT
+#if !defined(SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_CPP)
 extern template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3dTypes>;
-#endif
-#ifndef SOFA_DOUBLE
-extern template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3fTypes>;
-#endif
-
-#endif // defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_CPP)
+#endif //!defined(SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_CPP)
 
 } // namespace sofa::component::forcefield

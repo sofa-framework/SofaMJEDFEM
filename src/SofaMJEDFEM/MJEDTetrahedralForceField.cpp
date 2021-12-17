@@ -30,9 +30,6 @@
 #include <sofa/core/behavior/ForceField.inl>
 #include <SofaBaseTopology/TopologyData.inl>
 
-#include <string.h>
-#include <iostream>
-
 namespace sofa::component::forcefield
 {
 
@@ -42,19 +39,10 @@ SOFA_DECL_CLASS(MJEDTetrahedralForceField)
 
 // Register in the Factory
 int MJEDTetrahedralForceFieldClass = core::RegisterObject("Generic Tetrahedral finite elements")
-#ifndef SOFA_FLOAT
 .add< MJEDTetrahedralForceField<sofa::defaulttype::Vec3dTypes> >()
-#endif
-#ifndef SOFA_DOUBLE
-.add< MJEDTetrahedralForceField<Vec3fTypes> >()
-#endif
 ;
 
-#ifndef SOFA_FLOAT
 template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3dTypes>;
-#endif
-#ifndef SOFA_DOUBLE
-template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3fTypes>;
-#endif
+
 
 } // namespace sofa::component::forcefield
