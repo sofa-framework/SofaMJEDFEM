@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(SofaMJEDFEM VERSION 1.0 LANGUAGES CXX)
+project(SofaMJEDFEM VERSION 21.12 LANGUAGES CXX)
 
 find_package(SofaFramework REQUIRED)
 find_package(Sofa.GL REQUIRED)
