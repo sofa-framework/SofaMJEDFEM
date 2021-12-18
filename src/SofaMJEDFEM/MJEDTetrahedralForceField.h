@@ -47,8 +47,7 @@ using namespace sofa::component::topology;
 //******************* It is dependant on the description of material following the model of sofa::component::fem::HyperelasticMaterial.h ************************
 //***************************** more explication on MJED explication.pdf****************************
 
-/** Compute Finite Element forces based on tetrahedral elements.
-*/
+/** Compute Finite Element forces based on tetrahedral elements.*/
 template<class DataTypes>
 class MJEDTetrahedralForceField : public core::behavior::ForceField<DataTypes>
 {
@@ -267,10 +266,10 @@ protected:
 
 };
 
-using sofa::defaulttype::Vec3dTypes;
+using sofa::defaulttype::Vec3Types;
 
 #if !defined(SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_CPP)
-extern template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3dTypes>;
+extern template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3Types>;
 #endif //!defined(SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_CPP)
 
 } // namespace sofa::component::forcefield

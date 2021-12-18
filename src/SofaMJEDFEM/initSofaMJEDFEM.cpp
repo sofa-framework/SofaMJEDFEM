@@ -23,6 +23,8 @@
 #include <sofa/core/ObjectFactory.h>
 using sofa::core::ObjectFactory;
 
+namespace sofa::component
+{
 
 extern "C" {
     SOFA_MJED_FEM_API void initExternalModule();
@@ -68,3 +70,5 @@ const char* getModuleComponentList()
     static std::string classes = ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
     return classes.c_str();
 }
+
+} // namespace sofa::component
