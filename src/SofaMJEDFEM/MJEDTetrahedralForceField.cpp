@@ -35,8 +35,6 @@ namespace sofa::component::forcefield
 
 using namespace sofa::defaulttype;
 
-SOFA_DECL_CLASS(MJEDTetrahedralForceField)
-
 // Register in the Factory
 int MJEDTetrahedralForceFieldClass = core::RegisterObject("Generic Tetrahedral finite elements")
 .add< MJEDTetrahedralForceField<sofa::defaulttype::Vec3dTypes> >()
