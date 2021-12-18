@@ -22,13 +22,11 @@
 #define SOFA_COMPONENT_FORCEFIELD_MJEDTETRAHEDRALFORCEFIELD_CPP
 
 #include <SofaMJEDFEM/MJEDTetrahedralForceField.inl>
-
 #include <SofaMJEDFEM/config.h>
-#include <SofaBaseMechanics/MechanicalObject.h>
-#include <sofa/core/ObjectFactory.h>
 
-#include <sofa/core/behavior/ForceField.inl>
-#include <SofaBaseTopology/TopologyData.inl>
+#include <sofa/core/ObjectFactory.h>
+#include <sofa/defaulttype/VecTypes.h>
+
 
 namespace sofa::component::forcefield
 {
@@ -36,11 +34,11 @@ namespace sofa::component::forcefield
 using namespace sofa::defaulttype;
 
 // Register in the Factory
-int MJEDTetrahedralForceFieldClass = core::RegisterObject("Generic Tetrahedral finite elements")
-.add< MJEDTetrahedralForceField<sofa::defaulttype::Vec3dTypes> >()
-;
+int MJEDTetrahedralForceFieldClass = core::RegisterObject("Tetrahedral FEM model of visco-hyperelastic material using MJED")
+        .add< MJEDTetrahedralForceField<Vec3Types> >()
+        ;
 
-template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3dTypes>;
+template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3Types>;
 
 
 } // namespace sofa::component::forcefield
