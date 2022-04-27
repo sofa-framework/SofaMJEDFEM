@@ -52,15 +52,14 @@ using namespace	sofa::component::topology;
 using namespace core::topology;
 
 template< class DataTypes>
-void MJEDTetrahedralForceField<DataTypes>::TetrahedronHandler::applyCreateFunction(unsigned int tetrahedronIndex,
-                                                                                   TetrahedronRestInformation &tinfo,
-                                                                                   const Tetrahedron &,
-                                                                                   const sofa::type::vector<unsigned int> &,
-                                                                                   const sofa::type::vector<double> &)
+void MJEDTetrahedralForceField<DataTypes>::createTetrahedronRestInformation(unsigned int tetrahedronIndex,
+                                                                            TetrahedronRestInformation &tinfo,
+                                                                            const Tetrahedron &,
+                                                                            const sofa::type::vector<unsigned int> &,
+                                                                            const sofa::type::vector<double> &)
 {
-  if (ff) {
-    const vector< Tetrahedron > &tetrahedronArray=ff->_topology->getTetrahedra() ;
-    const std::vector< Edge> &edgeArray=ff->_topology->getEdges() ;
+    const vector< Tetrahedron > &tetrahedronArray=_topology->getTetrahedra() ;
+    const std::vector< Edge> &edgeArray=_topology->getEdges() ;
     unsigned int j,m,n;
     int k,l;
     typename DataTypes::Real volume;
@@ -68,11 +67,11 @@ void MJEDTetrahedralForceField<DataTypes>::TetrahedronHandler::applyCreateFuncti
 
 
 
-    const typename DataTypes::VecCoord& restPosition=ff->mstate->read(sofa::core::ConstVecCoordId::restPosition())->getValue();
+    const typename DataTypes::VecCoord& restPosition=this->mstate->read(sofa::core::ConstVecCoordId::restPosition())->getValue();
 
     ///describe the indices of the 4 tetrahedron vertices
     const Tetrahedron &t= tetrahedronArray[tetrahedronIndex];
-    BaseMeshTopology::EdgesInTetrahedron te=ff->_topology->getEdgesInTetrahedron(tetrahedronIndex);
+    BaseMeshTopology::EdgesInTetrahedron te=_topology->getEdgesInTetrahedron(tetrahedronIndex);
 
     // store the point position
 
@@ -93,7 +92,7 @@ void MJEDTetrahedralForceField<DataTypes>::TetrahedronHandler::applyCreateFuncti
 
     // precompute Di cross Dj needed for the second derivative of the SPK tensor
     for(j=0;j<6;++j) {
-      Edge e=ff->_topology->getLocalEdgesInTetrahedron(j);
+      Edge e=_topology->getLocalEdgesInTetrahedron(j);
       k=e[0];
       l=e[1];
       if (edgeArray[te[j]][0]!=t[k]) {
@@ -113,23 +112,23 @@ void MJEDTetrahedralForceField<DataTypes>::TetrahedronHandler::applyCreateFuncti
     // we also strore functions that need a call to the material and won't change
 
     //typename vector<HyperelasticMatTerm *> materialTermArray;
-    ff->materialTermArray = ff->myMaterial->getMaterialTermArray();
+    materialTermArray = myMaterial->getMaterialTermArray();
     typename vector<HyperelasticMatTerm *>::iterator it;
-    it=ff->materialTermArray.begin();
+    it=materialTermArray.begin();
     int id=0;
     std::vector<Real> number;
     Real coefficient=0;
     tinfo.coeff.resize(0);
     MatrixSym SPK;
-    for(;it<ff->materialTermArray.end();++it) {
-      number.push_back((*it)->MultiplyByCoeff(&tinfo,ff->globalParameters));
+    for(;it<materialTermArray.end();++it) {
+      number.push_back((*it)->MultiplyByCoeff(&tinfo,globalParameters));
       std::vector<MatrixList> Lijfirst;
       std::vector<MatrixList> Lijsecond;
       if((*it)->hasAConstantElasticityTensor()){
 
         vector<MatrixSym> vectorMatrixFirstPair;
         vector<MatrixSym> vectorMatrixSecondPair;
-        (*it)->InvariantMatricesElasticityTensor(&tinfo,ff->globalParameters,vectorMatrixFirstPair,vectorMatrixSecondPair);
+        (*it)->InvariantMatricesElasticityTensor(&tinfo,globalParameters,vectorMatrixFirstPair,vectorMatrixSecondPair);
         unsigned int sizeFirst=vectorMatrixFirstPair.size();
         unsigned int sizeSecond=vectorMatrixSecondPair.size();
 
@@ -137,7 +136,7 @@ void MJEDTetrahedralForceField<DataTypes>::TetrahedronHandler::applyCreateFuncti
           for(m=0;m<sizeFirst;++m){
             MatrixList Lijf;
             for(j=0;j<6;++j) {
-              Edge e=ff->_topology->getLocalEdgesInTetrahedron(j);
+              Edge e=_topology->getLocalEdgesInTetrahedron(j);
               k=e[0];
               l=e[1];
               if (edgeArray[te[j]][0]!=t[k]) {
@@ -156,7 +155,7 @@ void MJEDTetrahedralForceField<DataTypes>::TetrahedronHandler::applyCreateFuncti
             MatrixList Lijs;
             for(j=0;j<6;++j) {
 
-              Edge e=ff->_topology->getLocalEdgesInTetrahedron(j);
+              Edge e=_topology->getLocalEdgesInTetrahedron(j);
               k=e[0];
               l=e[1];
               if (edgeArray[te[j]][0]!=t[k]) {
@@ -194,40 +193,35 @@ void MJEDTetrahedralForceField<DataTypes>::TetrahedronHandler::applyCreateFuncti
     }// end of for it
 
     coefficient=number[0];
-    for(unsigned int m=1; m<ff->counter.size();++m){
-      if(ff->counter[m]!=ff->counter[m-1]){
+    for(unsigned int m=1; m<counter.size();++m){
+      if(counter[m]!=counter[m-1]){
         tinfo.coeff.push_back(coefficient);
         coefficient=number[m];
       }
     }//end of for m
     tinfo.coeff.push_back(coefficient);
-
-
-  }
 }
 
 template <class DataTypes> MJEDTetrahedralForceField<DataTypes>::MJEDTetrahedralForceField() 
-	: _topology(0)
-	, _initialPoints(0)
-	, updateMatrix(true)
-	, _meshSaved( false)
+    : _topology(0)
+    , _initialPoints(0)
+    , updateMatrix(true)
+    , _meshSaved( false)
     , viscous(false)
     , considerInversion(false)
     , f_inversion(initData(&f_inversion,false,"considerInversion","if inverted tetrahedra should be considered"))
-	, viscoelasticity(initData(&viscoelasticity,false,"viscous","If the material is also viscous"))
-	, f_stiffnessMatrixRegularizationWeight(initData(&f_stiffnessMatrixRegularizationWeight,false,"matrixRegularization","Regularization of the Stiffness Matrix (true or false)"))
-	, f_materialName(initData(&f_materialName,std::string("ArrudaBoyce"),"materialName","the name of the material to be used"))
-	, f_parameterSet(initData(&f_parameterSet,"ParameterSet","The global parameters specifying the material"))
-	, f_parameterAlpha(initData(&f_parameterAlpha,"ParameterAlpha","The parameters alpha to describe viscous part"))
-	, f_parameterTau(initData(&f_parameterTau,"ParameterTau","The parameters tau to describe viscous part"))
-	, f_anisotropySet(initData(&f_anisotropySet,"AnisotropyDirections","The global directions of anisotropy of the material"))
-	, f_parameterFileName(initData(&f_parameterFileName,std::string("myFile.param"),"ParameterFile","the name of the file describing the material parameters for all tetrahedra"))
+    , viscoelasticity(initData(&viscoelasticity,false,"viscous","If the material is also viscous"))
+    , f_stiffnessMatrixRegularizationWeight(initData(&f_stiffnessMatrixRegularizationWeight,false,"matrixRegularization","Regularization of the Stiffness Matrix (true or false)"))
+    , f_materialName(initData(&f_materialName,std::string("ArrudaBoyce"),"materialName","the name of the material to be used"))
+    , f_parameterSet(initData(&f_parameterSet,"ParameterSet","The global parameters specifying the material"))
+    , f_parameterAlpha(initData(&f_parameterAlpha,"ParameterAlpha","The parameters alpha to describe viscous part"))
+    , f_parameterTau(initData(&f_parameterTau,"ParameterTau","The parameters tau to describe viscous part"))
+    , f_anisotropySet(initData(&f_anisotropySet,"AnisotropyDirections","The global directions of anisotropy of the material"))
+    , f_parameterFileName(initData(&f_parameterFileName,std::string("myFile.param"),"ParameterFile","the name of the file describing the material parameters for all tetrahedra"))
     , tetrahedronInfo(initData(&tetrahedronInfo, "tetrahedronInfo", "Internal tetrahedron data"))
     , edgeInfo(initData(&edgeInfo, "edgeInfo", "Internal edge data"))
-	, myMaterial(0)
-    , tetrahedronHandler(NULL)
+    , myMaterial(0)
 {
-  tetrahedronHandler = new TetrahedronHandler(this,&tetrahedronInfo);
 }
 
 template <class DataTypes> MJEDTetrahedralForceField<DataTypes>::~MJEDTetrahedralForceField()
@@ -243,7 +237,6 @@ template <class DataTypes> MJEDTetrahedralForceField<DataTypes>::~MJEDTetrahedra
 			if (*it) delete *it;
 		}
 	}
-    if(tetrahedronHandler) delete tetrahedronHandler;
 }
 
 
@@ -348,17 +341,15 @@ template <class DataTypes> void MJEDTetrahedralForceField<DataTypes>::init()
             return;
 	}
 
-        type::vector<typename MJEDTetrahedralForceField<DataTypes>::TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
+        helper::WriteOnlyAccessor< Data<sofa::type::vector<TetrahedronRestInformation> > > tetrahedronInf = tetrahedronInfo;
 
 	/// prepare to store info in the triangle array
 	tetrahedronInf.resize(_topology->getNbTetrahedra());
 
-        type::vector<typename MJEDTetrahedralForceField<DataTypes>::EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
-
+        helper::WriteOnlyAccessor< Data<sofa::type::vector<EdgeInformation> > > edgeInf = edgeInfo;
         edgeInf.resize(_topology->getNbEdges());
         edgeInfo.createTopologyHandler(_topology);
 
-	edgeInfo.endEdit();
 
 	// get restPosition
 	if (_initialPoints.size() == 0)
@@ -410,9 +401,9 @@ template <class DataTypes> void MJEDTetrahedralForceField<DataTypes>::init()
 	/// initialize the data structure associated with each tetrahedron
         for (Index i=0;i<_topology->getNbTetrahedra();++i) {
 
-            tetrahedronHandler->applyCreateFunction(i,tetrahedronInf[i],
-                                              _topology->getTetrahedron(i),  (const vector< unsigned int > )0,
-                                              (const vector< double >)0);
+            createTetrahedronRestInformation(i,tetrahedronInf[i],
+                                             _topology->getTetrahedron(i),  (const vector< unsigned int > )0,
+                                             (const vector< double >)0);
             if(viscous){
                     int size=coeffA.size();
                     tetrahedronInf[i].GammaOld.resize(size);
@@ -421,17 +412,21 @@ template <class DataTypes> void MJEDTetrahedralForceField<DataTypes>::init()
 	}
 	/// set the call back function upon creation of a tetrahedron
         tetrahedronInfo.createTopologyHandler(_topology);
-
-	tetrahedronInfo.endEdit();
-	//  testDerivatives();  //to decomment if the test should be done
+        tetrahedronInfo.setCreationCallback([this](Index tetrahedronIndex, TetrahedronRestInformation& tetraInfo,
+            const core::topology::BaseMeshTopology::Tetrahedron& tetra,
+            const sofa::type::vector< Index >& ancestors,
+            const sofa::type::vector< double >& coefs)
+        {
+            createTetrahedronRestInformation(tetrahedronIndex, tetraInfo, tetra, ancestors, coefs);
+        });
 
 }
 
 template <class DataTypes> 
 void MJEDTetrahedralForceField<DataTypes>::addForce(const core::MechanicalParams* /* mparams */ /* PARAMS FIRST */, DataVecDeriv& d_f, const DataVecCoord& d_x, const DataVecDeriv& /* d_v */)
 {
-	VecDeriv& f = *d_f.beginEdit();
-	const VecCoord& x = d_x.getValue();
+        helper::WriteAccessor< Data< VecDeriv > > f = d_f;
+        helper::ReadAccessor< Data< VecCoord > > x = d_x;
         unsigned int nbInverted=0;
         Real volume;
 
@@ -445,7 +440,7 @@ void MJEDTetrahedralForceField<DataTypes>::addForce(const core::MechanicalParams
 	unsigned int i=0,j=0,k=0,l=0;
 	unsigned int nbTetrahedra=_topology->getNbTetrahedra();
 
-        type::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
+        helper::WriteOnlyAccessor< Data<sofa::type::vector<TetrahedronRestInformation> > > tetrahedronInf = tetrahedronInfo;
 
 
 	TetrahedronRestInformation *tetInfo;
@@ -723,9 +718,6 @@ void MJEDTetrahedralForceField<DataTypes>::addForce(const core::MechanicalParams
 
 	/// indicates that the next call to addDForce will need to update the stiffness matrix
 	updateMatrix=true;
-	tetrahedronInfo.endEdit();
-	d_f.endEdit();
-
 }
 
 
@@ -739,8 +731,8 @@ void MJEDTetrahedralForceField<DataTypes>::updateMatrixData()
 		const vector< Edge> &edgeArray=_topology->getEdges() ;
 
 
-                type::vector<EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
-                type::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
+                helper::WriteOnlyAccessor< Data<sofa::type::vector<EdgeInformation> > > edgeInf = edgeInfo;
+                helper::WriteOnlyAccessor< Data<sofa::type::vector<TetrahedronRestInformation> > > tetrahedronInf = tetrahedronInfo;
 
 		// VecDeriv& x = myposition;  // to uncomment for test derivatives and comment next line
 		const VecCoord& x = this->mstate->read(core::ConstVecCoordId::position())->getValue();
@@ -1019,24 +1011,22 @@ void MJEDTetrahedralForceField<DataTypes>::updateMatrixData()
 		}//end of for i
 		updateMatrix=false;
 
-		edgeInfo.endEdit();
-		tetrahedronInfo.endEdit();
 	}// end of if
 }
 
 template <class DataTypes> 
 void MJEDTetrahedralForceField<DataTypes>::addDForce(const core::MechanicalParams* mparams /* PARAMS FIRST */, DataVecDeriv& d_df, const DataVecDeriv& d_dx)
 {
-	VecDeriv& df = *d_df.beginEdit();
-	const VecDeriv& dx = d_dx.getValue();
-    Real kFactor = (Real)mparams->kFactorIncludingRayleighDamping(this->rayleighStiffness.getValue());
+        helper::WriteAccessor< Data< VecDeriv > > df = d_df;
+        helper::ReadAccessor< Data< VecDeriv > > dx = d_dx;
+        Real kFactor = (Real)mparams->kFactorIncludingRayleighDamping(this->rayleighStiffness.getValue());
 
 	unsigned int l=0;
 	unsigned int nbEdges=_topology->getNbEdges();
 	const vector< Edge> &edgeArray=_topology->getEdges();
 
-        type::vector<EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
-	EdgeInformation *einfo;
+        helper::WriteAccessor< Data<sofa::type::vector<EdgeInformation> > > edgeInf = edgeInfo;
+        EdgeInformation *einfo;
 
 	this->updateMatrixData();			
 
@@ -1060,9 +1050,6 @@ void MJEDTetrahedralForceField<DataTypes>::addDForce(const core::MechanicalParam
 		df[v0] += dv1 * kFactor;
 		df[v1] -= dv0 * kFactor;
 	}
-
-	edgeInfo.endEdit();
-	d_df.endEdit();
 }
 
 template <class DataTypes> 
@@ -1071,8 +1058,8 @@ void MJEDTetrahedralForceField<DataTypes>::addKToMatrix(sofa::linearalgebra::Bas
 	unsigned int nbEdges=_topology->getNbEdges();
 	const vector< Edge> &edgeArray=_topology->getEdges();
 
-        type::vector<EdgeInformation>& edgeInf = *(edgeInfo.beginEdit());
-	EdgeInformation *einfo;
+        helper::WriteAccessor< Data<sofa::type::vector<EdgeInformation> > > edgeInf = edgeInfo;
+        EdgeInformation *einfo;
 
 	this->updateMatrixData();
 
@@ -1096,7 +1083,6 @@ void MJEDTetrahedralForceField<DataTypes>::addKToMatrix(sofa::linearalgebra::Bas
 		}
 	}
 
-	edgeInfo.endEdit();
 }
 
 template<class DataTypes>
@@ -1117,8 +1103,8 @@ void MJEDTetrahedralForceField<DataTypes>::draw(const core::visual::VisualParams
 template<class DataTypes>
 type::Mat<3,3,double> MJEDTetrahedralForceField<DataTypes>::getPhi(int TetrahedronIndex)
 {
-        type::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
-	TetrahedronRestInformation *tetInfo;
+        helper::WriteOnlyAccessor< Data<sofa::type::vector<TetrahedronRestInformation> > > tetrahedronInf = tetrahedronInfo;
+        TetrahedronRestInformation *tetInfo;
 	tetInfo=&tetrahedronInf[TetrahedronIndex];
 	return tetInfo->deformationGradient;
 
@@ -1126,8 +1112,8 @@ type::Mat<3,3,double> MJEDTetrahedralForceField<DataTypes>::getPhi(int Tetrahedr
 template<class DataTypes>
 type::Mat<3,3,double> MJEDTetrahedralForceField<DataTypes>::getForce(int TetrahedronIndex)
 {
-        type::vector<TetrahedronRestInformation>& tetrahedronInf = *(tetrahedronInfo.beginEdit());
-	TetrahedronRestInformation *tetInfo;
+        helper::WriteOnlyAccessor< Data<sofa::type::vector<TetrahedronRestInformation> > > tetrahedronInf = tetrahedronInfo;
+        TetrahedronRestInformation *tetInfo;
 	tetInfo=&tetrahedronInf[TetrahedronIndex];
         type::Mat<3,3,double> force,inverseDeformationGradient;
 	force.clear();
@@ -1147,9 +1133,9 @@ type::Mat<3,3,double> MJEDTetrahedralForceField<DataTypes>::getForce(int Tetrahe
 template<class DataTypes>
 void MJEDTetrahedralForceField<DataTypes>::testDerivatives()
 {
-	DataVecCoord d_pos;
-	VecCoord &pos = *d_pos.beginEdit();
-	pos =  this->mstate->read(sofa::core::ConstVecCoordId::position())->getValue();
+        DataVecCoord d_pos;
+        VecCoord &pos = *d_pos.beginEdit();
+        pos =  this->mstate->read(sofa::core::ConstVecCoordId::position())->getValue();
 
 	// perturbate original state:
 	srand( 0 );
@@ -1159,19 +1145,19 @@ void MJEDTetrahedralForceField<DataTypes>::testDerivatives()
 
 
 	DataVecDeriv d_force1;
-	VecDeriv &force1 = *d_force1.beginEdit();
+        helper::WriteAccessor< Data<VecDeriv > > force1 = d_force1;
 	force1.resize( pos.size() );
 
 	DataVecDeriv d_deltaPos;
-	VecDeriv &deltaPos = *d_deltaPos.beginEdit();
+        helper::WriteAccessor< Data<VecDeriv > > deltaPos = d_deltaPos;
 	deltaPos.resize( pos.size() );
 
 	DataVecDeriv d_deltaForceCalculated;
-	VecDeriv &deltaForceCalculated = *d_deltaForceCalculated.beginEdit();
+        helper::WriteAccessor< Data<VecDeriv > > deltaForceCalculated = d_deltaForceCalculated;
 	deltaForceCalculated.resize( pos.size() );
 
 	DataVecDeriv d_force2;
-	VecDeriv &force2 = *d_force2.beginEdit();
+        helper::WriteAccessor< Data<VecDeriv > > force2 = d_force2;
 	force2.resize( pos.size() );
 
 	Coord epsilon, zero;
@@ -1181,7 +1167,7 @@ void MJEDTetrahedralForceField<DataTypes>::testDerivatives()
 	Real avgError=0.0;
 	int count=0;
 
-        type::vector<TetrahedronRestInformation> &tetrahedronInf = *(tetrahedronInfo.beginEdit());
+        helper::WriteOnlyAccessor< Data<sofa::type::vector<TetrahedronRestInformation> > > tetrahedronInf = tetrahedronInfo;
 
 	for (unsigned int moveIdx=0; moveIdx<pos.size(); moveIdx++)
 	{
@@ -1263,10 +1249,10 @@ void MJEDTetrahedralForceField<DataTypes>::testDerivatives()
 		}
 	}
 
-	tetrahedronInfo.endEdit();
 	printf( "testDerivatives passed!\n" );
 	avgError /= (Real)count;
-	printf( "Average error = %.2f%%\n", avgError );
+        printf( "Average error = %.2f%%\n", avgError );
+        d_pos.endEdit();
 }
 
 template<class DataTypes>
