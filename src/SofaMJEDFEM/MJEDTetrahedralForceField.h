@@ -230,27 +230,20 @@ public:
 
     void draw(const core::visual::VisualParams* vparams) override;
 
+
+    /** Method to initialize @sa TetrahedronRestInformation when a new Tetrahedron is created.
+    * Will be set as creation callback in the TetrahedronData @sa tetrahedronInfo
+    */
+    void createTetrahedronRestInformation(Index, TetrahedronRestInformation& t,
+        const core::topology::BaseMeshTopology::Tetrahedron&,
+        const sofa::type::vector<Index>&,
+        const sofa::type::vector<double>&);
+
     type::Mat<3,3,double> getPhi( int tetrahedronIndex);
     type::Mat<3,3,double> getForce( int tetrahedronIndex);
     TetrahedronData<sofa::type::vector<TetrahedronRestInformation> > tetrahedronInfo;
     EdgeData<sofa::type::vector<EdgeInformation> > edgeInfo;
 
-    class TetrahedronHandler : public TopologyDataHandler<core::topology::BaseMeshTopology::Tetrahedron,sofa::type::vector<TetrahedronRestInformation> >
-    {
-    public:
-        typedef typename MJEDTetrahedralForceField<DataTypes>::TetrahedronRestInformation TetrahedronRestInformation;
-        TetrahedronHandler(MJEDTetrahedralForceField<DataTypes>* ff,TetrahedronData<sofa::type::vector<TetrahedronRestInformation> >* data )
-            :TopologyDataHandler<core::topology::BaseMeshTopology::Tetrahedron,sofa::type::vector<TetrahedronRestInformation> >(data)
-            ,ff(ff)
-      {
-      }
-
-      void applyCreateFunction(unsigned int, TetrahedronRestInformation &t, const core::topology::BaseMeshTopology::Tetrahedron
-                               &, const sofa::type::vector<unsigned int> &, const sofa::type::vector<double> &);
-
-    protected:
-        MJEDTetrahedralForceField<DataTypes>* ff;
-    };
 protected:
 
     /// the array that describes the complete material energy and its derivatives
@@ -261,7 +254,6 @@ protected:
     void testDerivatives();// a test to check the accuracy of Addforce and AddDforce, it needs the calculus of the total strain energy
     void saveMesh( const char *filename );
 
-    TetrahedronHandler* tetrahedronHandler;
     VecCoord myposition;
 
 };
