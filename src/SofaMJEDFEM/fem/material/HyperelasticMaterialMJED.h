@@ -22,7 +22,7 @@
 #pragma once
 
 #include <sofa/core/topology/BaseMeshTopology.h>
-#include <SofaBaseTopology/TopologyData.h>
+#include <sofa/core/topology/TopologyData.h>
 #include <sofa/type/Vec.h>
 #include <sofa/type/Mat.h>
 #include <sofa/type/MatSym.h>
@@ -37,7 +37,7 @@ namespace sofa::component::fem
 {
 using namespace std;
 using namespace sofa::defaulttype;
-using namespace sofa::component::topology;
+using namespace sofa::core::topology;
 
 /** a Class that describe a generic hyperelastic material .
 The material is described based on continuum mechanics and the description is independent

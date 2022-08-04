@@ -34,13 +34,13 @@
 
 #include <sofa/core/visual/VisualParams.h>
 #include <sofa/defaulttype/VecTypes.h>
-#include <SofaBaseMechanics/MechanicalObject.h>
+#include <sofa/component/statecontainer/MechanicalObject.h>
 #include <sofa/core/ObjectFactory.h>
 #include <fstream> // for reading the file
 #include <iostream> //for debugging
 #include <sofa/gl/template.h>
 #include <sofa/core/behavior/ForceField.inl>
-#include <SofaBaseTopology/TopologyData.inl>
+#include <sofa/core/topology/TopologyData.inl>
 #include <algorithm>
 #include <iterator>
 
@@ -48,7 +48,6 @@ namespace sofa::component::forcefield
 {
 
 using namespace sofa::defaulttype;
-using namespace	sofa::component::topology;
 using namespace core::topology;
 
 template< class DataTypes>

@@ -24,12 +24,12 @@
 #include <SofaMJEDFEM/fem/material/HyperelasticMaterialMJED.h>
 
 #include <sofa/core/behavior/ForceField.h>
-#include <SofaBaseMechanics/MechanicalObject.h>
+#include <sofa/component/statecontainer/MechanicalObject.h>
 #include <sofa/type/Vec.h>
 #include <sofa/type/Mat.h>
 #include <sofa/type/MatSym.h>
 #include <sofa/core/topology/BaseMeshTopology.h>
-#include <SofaBaseTopology/TopologyData.h>
+#include <sofa/core/topology/TopologyData.h>
 #include <string>
 #include <map>
 
@@ -38,7 +38,7 @@ namespace sofa::component::forcefield
 
 using namespace std;
 using namespace sofa::defaulttype;
-using namespace sofa::component::topology;
+using namespace sofa::core::topology;
 
 
 

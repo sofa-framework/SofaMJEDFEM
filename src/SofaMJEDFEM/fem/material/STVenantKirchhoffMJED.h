@@ -32,7 +32,7 @@ namespace sofa::component::fem
 {
 using namespace std;
 using namespace sofa::defaulttype;
-using namespace sofa::component::topology;
+using namespace sofa::core::topology;
 
 /** a Class that describe a generic hyperelastic material : exemple of Boyce and Arruda
 The material is described based on continuum mechanics and the description is independent
