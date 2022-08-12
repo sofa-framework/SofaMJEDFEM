@@ -21,12 +21,6 @@
 ******************************************************************************/
 //used only to test compilation and dependencies in SOFA. (TODO: see if it has to be removed, or to be removed as soon as another .cpp include them)
 
-#include <SofaMiscFem/BoyceAndArruda.h>
-#include <SofaMiscFem/MooneyRivlin.h>
-#include <SofaMiscFem/STVenantKirchhoff.h>
-#include <SofaMiscFem/HyperelasticMaterial.h>
-#include <SofaMiscFem/VerondaWestman.h>
-#include <SofaMiscFem/Costa.h>
 #include <SofaMJEDFEM/fem/material/NeoHookean.h>
 #include <SofaMJEDFEM/fem/material/NeoHookeanIsotropicMJED.h>
 #include <SofaMJEDFEM/fem/material/Ogden.h>

@@ -21,7 +21,7 @@
 ******************************************************************************/
 #pragma once
 
-#include <SofaMiscFem/HyperelasticMaterial.h>
+#include <sofa/component/solidmechanics/fem/hyperelastic/material/HyperelasticMaterial.h>
 #include <sofa/type/Vec.h>
 #include <sofa/type/Mat.h>
 #include <string>

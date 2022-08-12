@@ -1116,7 +1116,9 @@ type::Mat<3,3,double> MJEDTetrahedralForceField<DataTypes>::getForce(int Tetrahe
 	tetInfo=&tetrahedronInf[TetrahedronIndex];
         type::Mat<3,3,double> force,inverseDeformationGradient;
 	force.clear();
-	inverseDeformationGradient.invert(tetInfo->deformationGradient);
+    const bool canInvert = inverseDeformationGradient.invert(tetInfo->deformationGradient);
+    assert(canInvert);
+    SOFA_UNUSED(canInvert);
 	for(unsigned int w=0;w<isExponential.size();++w){
 		if(!isExponential[w]){
 			force+=(tetInfo->sumfS[w].MatSymMultiply(tetInfo->deformationGradient)+inverseDeformationGradient.transposed()*tetInfo->sumDfg[w]*tetInfo->J)*tetInfo->coeff[w];
