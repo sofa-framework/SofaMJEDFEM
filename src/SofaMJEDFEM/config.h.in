@@ -32,3 +32,9 @@
 #else
 #  define SOFA_MJED_FEM_API  SOFA_IMPORT_DYNAMIC_LIBRARY
 #endif
+
+namespace sofamjedfem
+{
+constexpr const char* MODULE_NAME = "@PROJECT_NAME@";
+constexpr const char* MODULE_VERSION = "@PROJECT_VERSION@";
+} // namespace sofamjedfem
