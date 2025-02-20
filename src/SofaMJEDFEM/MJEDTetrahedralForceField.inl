@@ -66,7 +66,7 @@ void MJEDTetrahedralForceField<DataTypes>::createTetrahedronRestInformation(unsi
 
 
 
-    const typename DataTypes::VecCoord& restPosition=this->mstate->read(sofa::core::ConstVecCoordId::restPosition())->getValue();
+    const typename DataTypes::VecCoord& restPosition=this->mstate->read(sofa::core::vec_id::read_access::restPosition)->getValue();
 
     ///describe the indices of the 4 tetrahedron vertices
     const Tetrahedron &t= tetrahedronArray[tetrahedronIndex];
@@ -353,7 +353,7 @@ template <class DataTypes> void MJEDTetrahedralForceField<DataTypes>::init()
 	// get restPosition
 	if (_initialPoints.size() == 0)
 	{
-            const VecCoord& p = this->mstate->read(core::ConstVecCoordId::restPosition())->getValue();
+            const VecCoord& p = this->mstate->read(core::vec_id::read_access::restPosition)->getValue();
             _initialPoints=p;
 	}
 
@@ -734,7 +734,7 @@ void MJEDTetrahedralForceField<DataTypes>::updateMatrixData()
                 helper::WriteOnlyAccessor< Data<sofa::type::vector<TetrahedronRestInformation> > > tetrahedronInf = tetrahedronInfo;
 
 		// VecDeriv& x = myposition;  // to uncomment for test derivatives and comment next line
-		const VecCoord& x = this->mstate->read(core::ConstVecCoordId::position())->getValue();
+		const VecCoord& x = this->mstate->read(core::vec_id::read_access::position)->getValue();
 		EdgeInformation *einfo;
 
 		unsigned int m,n;
@@ -1136,7 +1136,7 @@ void MJEDTetrahedralForceField<DataTypes>::testDerivatives()
 {
         DataVecCoord d_pos;
         VecCoord &pos = *d_pos.beginEdit();
-        pos =  this->mstate->read(sofa::core::ConstVecCoordId::position())->getValue();
+        pos =  this->mstate->read(sofa::core::vec_id::read_access::position)->getValue();
 
 	// perturbate original state:
 	srand( 0 );
@@ -1259,7 +1259,7 @@ void MJEDTetrahedralForceField<DataTypes>::testDerivatives()
 template<class DataTypes>
 void MJEDTetrahedralForceField<DataTypes>::saveMesh( const char *filename )
 {
-	VecCoord pos(this->mstate->read(sofa::core::ConstVecCoordId::position())->getValue());
+	VecCoord pos(this->mstate->read(sofa::core::vec_id::read_access::position)->getValue());
 	core::topology::BaseMeshTopology::SeqTriangles triangles = _topology->getTriangles();
 	FILE *file = fopen( filename, "wb" );
 	if (!file) return;
