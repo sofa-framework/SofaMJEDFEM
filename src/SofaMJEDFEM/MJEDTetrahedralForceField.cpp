@@ -34,9 +34,11 @@ namespace sofa::component::forcefield
 using namespace sofa::defaulttype;
 
 // Register in the Factory
-int MJEDTetrahedralForceFieldClass = core::RegisterObject("Tetrahedral FEM model of visco-hyperelastic material using MJED")
-        .add< MJEDTetrahedralForceField<Vec3Types> >()
-        ;
+void registerMJEDTetrahedralForceField(sofa::core::ObjectFactory* factory)
+{
+    factory->registerObjects(core::ObjectRegistrationData("Tetrahedral FEM model of visco-hyperelastic material using MJED")
+                                     .add< MJEDTetrahedralForceField<Vec3Types> >());
+}
 
 template class SOFA_MJED_FEM_API MJEDTetrahedralForceField<Vec3Types>;
 

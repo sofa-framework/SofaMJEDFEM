@@ -21,54 +21,72 @@
 ******************************************************************************/
 #include <SofaMJEDFEM/config.h>
 #include <sofa/core/ObjectFactory.h>
+#include <sofa/helper/system/PluginManager.h>
+
 using sofa::core::ObjectFactory;
+
+namespace sofamjedfem
+{
+    extern void registerMJEDTetrahedralForceField(sofa::core::ObjectFactory *factory);
+} // namespace sofamjedfem
+
 
 namespace sofa::component
 {
+    using namespace sofamjedfem;
 
-extern "C" {
-    SOFA_MJED_FEM_API void initExternalModule();
-    SOFA_MJED_FEM_API const char* getModuleName();
-    SOFA_MJED_FEM_API const char* getModuleVersion();
-    SOFA_MJED_FEM_API const char* getModuleLicense();
-    SOFA_MJED_FEM_API const char* getModuleDescription();
-    SOFA_MJED_FEM_API const char* getModuleComponentList();
-}
-
-void initExternalModule()
-{
-    static bool first = true;
-    if (first)
-    {
-        first = false;
+    extern "C" {
+        SOFA_MJED_FEM_API void initExternalModule();
+        SOFA_MJED_FEM_API const char* getModuleName();
+        SOFA_MJED_FEM_API const char* getModuleVersion();
+        SOFA_MJED_FEM_API const char* getModuleLicense();
+        SOFA_MJED_FEM_API const char* getModuleDescription();
+        SOFA_MJED_FEM_API const char* getModuleComponentList();
+        SOFA_MJED_FEM_API void registerObjects(sofa::core::ObjectFactory* factory);
     }
-}
 
-const char* getModuleName()
-{
-    return sofa_tostring(SOFA_TARGET);
-}
+    void initExternalModule()
+    {
+        static bool first = true;
+        if (first)
+        {
+            // make sure that this plugin is registered into the PluginManager
+            sofa::helper::system::PluginManager::getInstance().registerPlugin(MODULE_NAME);
 
-const char* getModuleVersion()
-{
-    return sofa_tostring(SOFAMJEDFEM_VERSION);
-}
+            first = false;
+        }
+    }
 
-const char* getModuleLicense()
-{
-    return "LGPL";
-}
+    const char* getModuleName()
+    {
+        return sofa_tostring(SOFA_TARGET);
+    }
 
-const char* getModuleDescription()
-{
-    return "This plugin implements the Multiplicative Jacobian Energy Decomposition or MJED method.";
-}
+    const char* getModuleVersion()
+    {
+        return sofa_tostring(SOFAMJEDFEM_VERSION);
+    }
 
-const char* getModuleComponentList()
-{
-    /// string containing the names of the classes provided by the plugin
-    static std::string classes = ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
-    return classes.c_str();
-}
+    const char* getModuleLicense()
+    {
+        return "LGPL";
+    }
+
+    const char* getModuleDescription()
+    {
+        return "This plugin implements the Multiplicative Jacobian Energy Decomposition or MJED method.";
+    }
+
+    const char* getModuleComponentList()
+    {
+        /// string containing the names of the classes provided by the plugin
+        static std::string classes = ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
+        return classes.c_str();
+    }
+
+    void registerObjects(sofa::core::ObjectFactory* factory)
+    {
+        registerMJEDTetrahedralForceField(factory);
+    }
 
 } // namespace sofa::component

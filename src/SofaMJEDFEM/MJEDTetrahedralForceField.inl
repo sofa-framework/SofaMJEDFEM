@@ -114,7 +114,6 @@ void MJEDTetrahedralForceField<DataTypes>::createTetrahedronRestInformation(unsi
     materialTermArray = myMaterial->getMaterialTermArray();
     typename vector<HyperelasticMatTerm *>::iterator it;
     it=materialTermArray.begin();
-    int id=0;
     std::vector<Real> number;
     Real coefficient=0;
     tinfo.coeff.resize(0);
@@ -181,7 +180,6 @@ void MJEDTetrahedralForceField<DataTypes>::createTetrahedronRestInformation(unsi
         tinfo.Lij_second_k.push_back(  Lijsecond );
       }
 
-      id++;
       tinfo.functionf.push_back(1);
       tinfo.functiong.push_back(1);
       tinfo.functionDf.push_back(0);
