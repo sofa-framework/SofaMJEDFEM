@@ -25,7 +25,7 @@
 
 using sofa::core::ObjectFactory;
 
-namespace sofamjedfem
+namespace sofa::component::forcefield
 {
     extern void registerMJEDTetrahedralForceField(sofa::core::ObjectFactory *factory);
 } // namespace sofamjedfem
@@ -86,7 +86,7 @@ namespace sofa::component
 
     void registerObjects(sofa::core::ObjectFactory* factory)
     {
-        registerMJEDTetrahedralForceField(factory);
+        sofa::component::forcefield::registerMJEDTetrahedralForceField(factory);
     }
 
 } // namespace sofa::component
